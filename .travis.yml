@@ -1,20 +1,30 @@
 language: android
 
 jdk:
- - oraclejdk8
+  - oraclejdk8
 
-android:
-  components:
-    - build-tools-23.0.0
-    - android-23
-    - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-19
+before_install:
+  # Install SDK license so Android Gradle plugin can install deps.
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+  # Install the rest of tools (e.g., avdmanager).
+  - sdkmanager tools
+  # Install the system image.
+  - sdkmanager "system-images;android-19;default;armeabi-v7a"
+  # Create and start emulator for the script. Meant to race the install task.
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a"
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
+
+install: ./gradlew clean assemble --stacktrace
 
 before_script:
-  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
+
+script: ./gradlew check connectedCheck --stacktrace
 
 env:
   global:
@@ -24,3 +34,7 @@ notifications:
   email: false
 
 sudo: false
+
+cache:
+  directories:
+    - $HOME/.gradle

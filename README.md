@@ -3,7 +3,7 @@ U+2020
 
 A sample Android app which showcases advanced usage of Dagger among other open source libraries.
 
-[Watch the corresponding talk][parleys] or [view the slides][slides].
+[Watch the corresponding talk][video] or [view the slides][slides].
 
 The `ObjectGraph` is created in the `U2020App`'s `onCreate` method. The `Modules` class provides a
 single method, `list`, which returns the list of module instances to use.
@@ -18,10 +18,10 @@ features to the app which are presented in the Debug Drawer™. The drawer is op
 swipe from the right of the screen. From here you can change and view all of the developer options
 of the application.
 
-The drawer is provided by the simple interface `AppContainer`. This is an indirection that the
+The drawer is provided by the simple interface `ViewContainer`. This is an indirection that the
 single activity uses to fetch its container into which it can place its content. The default
 implementation returns the Android-provided content view. The 'debug' version overrides this with
-`DebugAppContainer` which is responsible for creating the drawer, adding it to the activity, and
+`DebugViewContainer` which is responsible for creating the drawer, adding it to the activity, and
 returning its content view group. It also injects all of the developer objects and binds them to
 controls in the drawer.
 
@@ -46,7 +46,7 @@ simulating the remote server in-memory.
 ```
 See `DebugDataModule` and `DebugApiModule` to see this in action in the real app.
 
-The mock implementations of these types are some of those injected into the `DebugAppContainer` for
+The mock implementations of these types are some of those injected into the `DebugViewContainer` for
 binding in the drawer. This allows us to do things like control their fake network behavior and
 alter their behavior.
 
@@ -75,6 +75,7 @@ Libraries
  * ProcessPhoenix - https://github.com/JakeWharton/ProcessPhoenix
  * Scalpel - http://github.com/JakeWharton/scalpel
  * LeakCanary - http://github.com/square/leakcanary
+ * Telescope - https://github.com/mattprecious/telescope
 
 
 
@@ -105,5 +106,5 @@ License
     limitations under the License.
 
 
- [parleys]: http://parleys.com/play/529bde2ce4b0e619540cc3ae
+ [video]: https://www.youtube.com/watch?v=0XHx9jtxIxU
  [slides]: https://speakerdeck.com/jakewharton/android-apps-with-dagger-devoxx-2013
